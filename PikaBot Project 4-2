@@ -1,0 +1,44 @@
+#include "pitches.h"
+#include "CytronMotorDriver.h"
+
+CytronMD motorLeft(PWM_PWM, 11, 10);
+CytronMD motorRight(PWM_PWM, 9, 3);
+
+// notes in the melody:
+int melody[] = {
+  NOTE_B4, NOTE_B4, NOTE_G4, 0,
+  NOTE_C5, NOTE_C5, NOTE_D5, NOTE_D5, NOTE_G5
+};
+
+// note durations: 4 = quarter note, 8 = eighth note, etc.:
+int noteDurations[] = {
+  8, 8, 8, 8,
+  8, 8, 8, 8, 4
+};
+
+void robotMove(int speedLeft, int speedRight) {
+  motorLeft.setSpeed(speedLeft);
+  motorRight.setSpeed(speedRight);
+}
+
+void setup() {
+  // iterate over the notes of the melody:
+  for (int thisNote = 0; thisNote < 9; thisNote++) {
+    
+    // to calculate the note duration, take one second divided by the note type.
+    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+    int noteDuration = 1000 / noteDurations[thisNote];
+    tone(8, melody[thisNote], noteDuration);
+    
+    // to distinguish the notes, set a minimum time between them.
+    // the note's duration + 30% seems to work well:
+    int pauseBetweenNotes = noteDuration * 1.30;
+    delay(pauseBetweenNotes);
+    // stop the tone playing:
+    noTone(8);
+  }
+}
+
+void loop() {
+  robotMove(-200, 200); // turn left
+}
