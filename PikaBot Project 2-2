@@ -1,0 +1,50 @@
+#include "CytronMotorDriver.h"
+CytronMD motorLeft(PWM_PWM, 11, 10);
+CytronMD motorRight(PWM_PWM, 9, 3);
+
+//Declare variable
+long duration;
+long distance;
+//Define constant
+#define BUTTON 2
+#define TRIGPIN 5
+#define ECHOPIN 4
+
+void robotStop() {
+  motorLeft.setSpeed(0);
+  motorRight.setSpeed(0);
+}
+void robotMove(int speedLeft, int speedRight) {
+  motorLeft.setSpeed(speedLeft);
+  motorRight.setSpeed(speedRight);
+}
+
+void setup() {
+  //Configure input and output pins
+  pinMode(TRIGPIN, OUTPUT);
+  pinMode(ECHOPIN, INPUT);
+  pinMode(BUTTON, INPUT_PULLUP);
+}
+
+void loop() {
+  if (digitalRead(BUTTON) == LOW) { // Button is pressed
+
+    while (true) { //Execute the code in this loop forever
+      digitalWrite(TRIGPIN, LOW);
+      delayMicroseconds(2);
+      digitalWrite(TRIGPIN, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(TRIGPIN, LOW);
+
+      duration = pulseIn(ECHOPIN, HIGH);
+      distance = duration * 0.017;
+
+      if (distance > 15) {
+        robotMove(200, 200); //Robot move forward at speed 200
+      }
+      else {
+        robotStop(); //Robot stop
+      }
+    }
+  }
+}
