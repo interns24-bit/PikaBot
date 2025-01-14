@@ -1,0 +1,13 @@
+#include "CytronMotorDriver.h"
+CytronMD motorLeft(PWM_PWM, 11, 10);
+CytronMD motorRight(PWM_PWM, 9, 3);
+
+void setup() {
+  // put your setup code here, to run once:
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  motorLeft.setSpeed(200);
+  motorRight.setSpeed(200);
+}
